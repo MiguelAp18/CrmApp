@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 // Components
+import NavBar from './components/Navbar/NavBar';
 import TicketsList from './components/Tickets/TicketsList';
 import TicketForm from './components/Tickets/TicketForm';
-import NavBar from './components/Navbar/NavBar';
+import FilteredList from './components/Tickets/FilteredList';
 
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,9 +21,11 @@ root.render(
         <Route exact path='/' Component={TicketsList}/>
         <Route path='/ticket-form' Component={TicketForm}/>
         <Route path='/update-ticket/:id' Component={TicketForm}/>
+        <Route path='/tickets-filtered' Component={FilteredList}/>
       </Routes>
     </div>
   </BrowserRouter>
 );
+
 
 reportWebVitals();

@@ -14,13 +14,13 @@ class TicketView(View):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     
-    def get(self, request, id = 0):
+    def get(self, request, id = ''):
         
-        if id > 0:
+        if id != '':
             tickets = list(Ticket.objects.filter(id=id).values())
             if len(tickets) > 0:
                 ticket = tickets[0]
-                data = {'message': 'Success', 'tickets': ticket}
+                data = {'message': 'Success', 'ticket': ticket}
             else:
                 data = {'message': 'Ticket not found'}
 
@@ -38,7 +38,12 @@ class TicketView(View):
     def post(self, request):
         
         res = json.loads(request.body)
-        Ticket.objects.create(title=res['title'], description=res['description'], priority=res['priority'])
+        Ticket.objects.create(
+            title=res['title'],
+            description=res['description'],
+            priority=res['priority'],
+            category=res['category']
+        )
         data = {'message': 'Success'}
 
         return JsonResponse(data)
@@ -52,6 +57,7 @@ class TicketView(View):
             ticket.title = res['title']
             ticket.description = res['description']
             ticket.priority = res['priority']
+            ticket.category = res['category']
             ticket.save()
             data = {'message': 'Success'}
         else:
@@ -69,3 +75,16 @@ class TicketView(View):
             data = {'message': 'Ticket not found'}
 
         return JsonResponse(data)
+    
+@csrf_exempt
+def search_tickets(request):
+
+    query = request.GET.get('title', '')
+    
+    if query:
+        tickets = list(Ticket.objects.filter(title__icontains=query).values())
+        data = {'message': 'Tickets found', 'tickets': tickets}
+    else:
+        data = {'message': 'Tickets not found'}
+    
+    return JsonResponse(data)

@@ -17,7 +17,8 @@ export const registerTicket = async (newTicket) => {
         body: JSON.stringify({
             'title': String(newTicket.title).trim(),
             'description': String(newTicket.description).trim(),
-            'priority': parseInt(newTicket.priority)
+            'priority': parseInt(newTicket.priority),
+            'category': String(newTicket.category).trim()
         })
     })
 }
@@ -31,7 +32,8 @@ export const updateTicket = async (ticketId, updatedTicket) => {
         body: JSON.stringify({
             'title': String(updatedTicket.title).trim(),
             'description': String(updatedTicket.description).trim(),
-            'priority': parseInt(updatedTicket.priority)
+            'priority': parseInt(updatedTicket.priority),
+            'category': String(updatedTicket.category).trim()
         })
     })
 }
@@ -40,4 +42,8 @@ export const deleteTicket = async (ticketId) => {
     return await fetch(`${api_url}${ticketId}`, {
         method: 'DELETE'
     })
+}
+
+export const searchTicket = async (title) => {
+    return await fetch(`http://127.0.0.1:8000/api/search/?title=${title}`)
 }

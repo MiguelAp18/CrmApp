@@ -9,7 +9,13 @@ const TicketForm = () => {
     const navigate = useNavigate()
     const params = useParams()
 
-    const initialState = {id: 0, title: '', description: '', priority: 0}
+    const initialState = {
+                            id: '', 
+                            title: '', 
+                            description: '', 
+                            category: '', 
+                            priority: 0
+                        }
     const [ticket, setTicket] = useState(initialState)
 
     const handleInputChange = (e) => {
@@ -39,8 +45,8 @@ const TicketForm = () => {
         try {
             const res = await TicketServer.getTicket(ticketId)
             const data = await res.json()
-            const { title, description, priority } = data.tickets
-            setTicket({title, description, priority})
+            const { title, description, priority, category } = data.ticket
+            setTicket({title, description, priority, category})
         } catch (error) {
             console.log(error)
         }
@@ -58,15 +64,32 @@ const TicketForm = () => {
         <h2 className='mb-3 text-center'>Ticket</h2>
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">Title</label>
+                <label className="form-label">Title</label>
                 <input type="text" name='title' value={ticket.title} onChange={handleInputChange} className="form-control" minLength={2} maxLength={50} autoFocus required/>
             </div>
             <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">Description</label>
+                <label className="form-label">Description</label>
                 <input type="text" name='description' value={ticket.description} onChange={handleInputChange} className="form-control" minLength={2} maxLength={300} required/>
             </div>
             <div className="mb-3">
-                <label for="exampleInputPassword1" className="form-label">Priority</label>
+                <label className="form-label">Category</label>
+                <select 
+                    name='category' 
+                    value={ticket.category} 
+                    onChange={handleInputChange} 
+                    className="form-control" 
+                    required
+                    style={{cursor: 'pointer'}}
+                >
+                    <option value="">Select a category</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Software">Software</option>
+                    <option value="HR">HR</option>
+                    <option value="Marketing">Marketing</option>
+                </select>
+            </div>
+            <div className="mb-3">
+                <label className="form-label">Priority</label>
                 <input type="number" name='priority' value={ticket.priority} onChange={handleInputChange} className="form-control" required/>
             </div>
             <div className='d-grid gap-2'>
